@@ -1,13 +1,81 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phoenix BPMN - Professional Workflow Tool</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 700px;
+            margin: 20px;
+        }
+        .logo { font-size: 3em; margin-bottom: 20px; color: #667eea; }
+        h1 { color: #2d3748; font-size: 2.5em; margin-bottom: 10px; font-weight: 700; }
+        .subtitle { color: #4a5568; font-size: 1.2em; margin-bottom: 30px; }
+        .status { 
+            background: #48bb78; color: white; padding: 12px 30px; 
+            border-radius: 30px; display: inline-block; font-weight: 600; 
+            margin-bottom: 30px; 
+        }
+        .features { text-align: left; margin: 30px 0; }
+        .feature { 
+            padding: 15px; background: #f8fafc; border-radius: 8px; 
+            border-left: 4px solid #667eea; margin-bottom: 15px; 
+        }
+        .tech-stack { background: #f7fafc; padding: 20px; border-radius: 10px; margin-top: 30px; }
+        .tech-list { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 15px; }
+        .tech-item { 
+            background: #4299e1; color: white; padding: 8px 16px; 
+            border-radius: 20px; font-size: 0.9em; font-weight: 500; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🚀</div>
+        <h1>Phoenix BPMN</h1>
+        <div class="subtitle">Professional Business Process Management</div>
+        
+        <div class="status">✅ FOUNDATION DEPLOYED</div>
+        
+        <div class="features">
+            <div class="feature"><strong>🎨 BPMN Canvas:</strong> Professional editor with bpmn-js</div>
+            <div class="feature"><strong>🤖 AI Generation:</strong> Natural language to BPMN via Claude AI</div>
+            <div class="feature"><strong>⚡ Real-time:</strong> Live collaboration and updates</div>
+            <div class="feature"><strong>🔗 Integration:</strong> n8n workflows and REST APIs</div>
+        </div>
+        
+        <div class="tech-stack">
+            <strong>Technology Stack</strong>
+            <div class="tech-list">
+                <span class="tech-item">React 19</span>
+                <span class="tech-item">bpmn-js</span>
+                <span class="tech-item">Vite</span>
+                <span class="tech-item">n8n Cloud</span>
+                <span class="tech-item">Claude AI</span>
+                <span class="tech-item">DigitalOcean</span>
+            </div>
+        </div>
+        
+        <div style="margin-top: 40px; color: #718096; font-size: 0.9em;">
+            <strong>Phoenix BPMN</strong> - Development in Progress<br>
+            Next: Module 2 BPMN Canvas + Module 3 n8n Experiments
+        </div>
+    </div>
+</body>
 </html>
