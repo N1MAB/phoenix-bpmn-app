@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import BpmnViewer from '../../modules/bpmn-canvas/BpmnViewer.jsx'
+import BpmnViewer from './components/BpmnViewer.jsx'
 import './App.css'
 
 function BpmnApp() {
