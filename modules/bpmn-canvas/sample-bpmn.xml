@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" 
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_Phoenix_BPMN" 
+                  targetNamespace="http://phoenix.bpmn.io/schema/bpmn">
+  
+  <bpmn:process id="Process_Phoenix_Demo" isExecutable="true" name="Phoenix BPMN Demo Process">
+    
+    <!-- Start Event -->
+    <bpmn:startEvent id="StartEvent_1" name="Process Started">
+      <bpmn:outgoing>Flow_Start_To_Task1</bpmn:outgoing>
+    </bpmn:startEvent>
+    
+    <!-- User Task 1 -->
+    <bpmn:userTask id="Task_Requirements_Analysis" name="Requirements Analysis">
+      <bpmn:incoming>Flow_Start_To_Task1</bpmn:incoming>
+      <bpmn:outgoing>Flow_Task1_To_Gateway</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Exclusive Gateway -->
+    <bpmn:exclusiveGateway id="Gateway_Complexity_Check" name="Complexity Check">
+      <bpmn:incoming>Flow_Task1_To_Gateway</bpmn:incoming>
+      <bpmn:outgoing>Flow_Gateway_To_Simple</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Gateway_To_Complex</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    
+    <!-- Simple Path -->
+    <bpmn:userTask id="Task_Simple_Implementation" name="Simple Implementation">
+      <bpmn:incoming>Flow_Gateway_To_Simple</bpmn:incoming>
+      <bpmn:outgoing>Flow_Simple_To_Merge</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Complex Path -->
+    <bpmn:userTask id="Task_Complex_Design" name="Complex Design">
+      <bpmn:incoming>Flow_Gateway_To_Complex</bpmn:incoming>
+      <bpmn:outgoing>Flow_Complex_To_Implementation</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <bpmn:userTask id="Task_Complex_Implementation" name="Complex Implementation">
+      <bpmn:incoming>Flow_Complex_To_Implementation</bpmn:incoming>
+      <bpmn:outgoing>Flow_Complex_To_Merge</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- Merge Gateway -->
+    <bpmn:exclusiveGateway id="Gateway_Merge" name="Merge Paths">
+      <bpmn:incoming>Flow_Simple_To_Merge</bpmn:incoming>
+      <bpmn:incoming>Flow_Complex_To_Merge</bpmn:incoming>
+      <bpmn:outgoing>Flow_Merge_To_Testing</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    
+    <!-- Testing Task -->
+    <bpmn:userTask id="Task_Testing" name="Quality Testing">
+      <bpmn:incoming>Flow_Merge_To_Testing</bpmn:incoming>
+      <bpmn:outgoing>Flow_Testing_To_End</bpmn:outgoing>
+    </bpmn:userTask>
+    
+    <!-- End Event -->
+    <bpmn:endEvent id="EndEvent_1" name="Process Completed">
+      <bpmn:incoming>Flow_Testing_To_End</bpmn:incoming>
+    </bpmn:endEvent>
+    
+    <!-- Sequence Flows -->
+    <bpmn:sequenceFlow id="Flow_Start_To_Task1" sourceRef="StartEvent_1" targetRef="Task_Requirements_Analysis" />
+    <bpmn:sequenceFlow id="Flow_Task1_To_Gateway" sourceRef="Task_Requirements_Analysis" targetRef="Gateway_Complexity_Check" />
+    <bpmn:sequenceFlow id="Flow_Gateway_To_Simple" sourceRef="Gateway_Complexity_Check" targetRef="Task_Simple_Implementation" name="Simple">
+      <bpmn:conditionExpression>complexity == 'simple'</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Gateway_To_Complex" sourceRef="Gateway_Complexity_Check" targetRef="Task_Complex_Design" name="Complex">
+      <bpmn:conditionExpression>complexity == 'complex'</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Simple_To_Merge" sourceRef="Task_Simple_Implementation" targetRef="Gateway_Merge" />
+    <bpmn:sequenceFlow id="Flow_Complex_To_Implementation" sourceRef="Task_Complex_Design" targetRef="Task_Complex_Implementation" />
+    <bpmn:sequenceFlow id="Flow_Complex_To_Merge" sourceRef="Task_Complex_Implementation" targetRef="Gateway_Merge" />
+    <bpmn:sequenceFlow id="Flow_Merge_To_Testing" sourceRef="Gateway_Merge" targetRef="Task_Testing" />
+    <bpmn:sequenceFlow id="Flow_Testing_To_End" sourceRef="Task_Testing" targetRef="EndEvent_1" />
+    
+  </bpmn:process>
+  
+  <!-- Visual Layout -->
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_Phoenix_Demo">
+      
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="133" y="145" width="74" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_Requirements_Analysis_di" bpmnElement="Task_Requirements_Analysis">
+        <dc:Bounds x="240" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Gateway_Complexity_Check_di" bpmnElement="Gateway_Complexity_Check" isMarkerVisible="true">
+        <dc:Bounds x="395" y="95" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="378" y="152" width="84" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_Simple_Implementation_di" bpmnElement="Task_Simple_Implementation">
+        <dc:Bounds x="500" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_Complex_Design_di" bpmnElement="Task_Complex_Design">
+        <dc:Bounds x="500" y="200" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_Complex_Implementation_di" bpmnElement="Task_Complex_Implementation">
+        <dc:Bounds x="650" y="200" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Gateway_Merge_di" bpmnElement="Gateway_Merge" isMarkerVisible="true">
+        <dc:Bounds x="795" y="95" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="785" y="152" width="70" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="Task_Testing_di" bpmnElement="Task_Testing">
+        <dc:Bounds x="900" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      
+      <bpmndi:BPMNShape id="EndEvent_1_di" bpmnElement="EndEvent_1">
+        <dc:Bounds x="1052" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1027" y="145" width="86" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      
+      <!-- Edges -->
+      <bpmndi:BPMNEdge id="Flow_Start_To_Task1_di" bpmnElement="Flow_Start_To_Task1">
+        <di:waypoint x="188" y="120" />
+        <di:waypoint x="240" y="120" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_Task1_To_Gateway_di" bpmnElement="Flow_Task1_To_Gateway">
+        <di:waypoint x="340" y="120" />
+        <di:waypoint x="395" y="120" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_Gateway_To_Simple_di" bpmnElement="Flow_Gateway_To_Simple">
+        <di:waypoint x="445" y="120" />
+        <di:waypoint x="500" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="460" y="102" width="35" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_Gateway_To_Complex_di" bpmnElement="Flow_Gateway_To_Complex">
+        <di:waypoint x="420" y="145" />
+        <di:waypoint x="420" y="240" />
+        <di:waypoint x="500" y="240" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="447" y="222" width="45" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_Simple_To_Merge_di" bpmnElement="Flow_Simple_To_Merge">
+        <di:waypoint x="600" y="120" />
+        <di:waypoint x="795" y="120" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_Complex_To_Implementation_di" bpmnElement="Flow_Complex_To_Implementation">
+        <di:waypoint x="600" y="240" />
+        <di:waypoint x="650" y="240" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_Complex_To_Merge_di" bpmnElement="Flow_Complex_To_Merge">
+        <di:waypoint x="750" y="240" />
+        <di:waypoint x="820" y="240" />
+        <di:waypoint x="820" y="145" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_Merge_To_Testing_di" bpmnElement="Flow_Merge_To_Testing">
+        <di:waypoint x="845" y="120" />
+        <di:waypoint x="900" y="120" />
+      </bpmndi:BPMNEdge>
+      
+      <bpmndi:BPMNEdge id="Flow_Testing_To_End_di" bpmnElement="Flow_Testing_To_End">
+        <di:waypoint x="1000" y="120" />
+        <di:waypoint x="1052" y="120" />
+      </bpmndi:BPMNEdge>
+      
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  
+</bpmn:definitions>
