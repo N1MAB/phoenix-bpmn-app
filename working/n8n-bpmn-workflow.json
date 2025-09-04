@@ -1,0 +1,215 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "bpmn-generator",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -304,
+        -96
+      ],
+      "id": "a9d563ee-ce70-4cfe-9ed4-359edf0f7892",
+      "name": "BPMN Webhook",
+      "webhookId": "bpmn-generator-webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "process_description",
+              "name": "process_description",
+              "type": "string",
+              "value": "={{ $ifEmpty($json.body?.process_description, $ifEmpty($json.process_description, 'Maak een eenvoudig proces')) }}"
+            },
+            {
+              "id": "process_name",
+              "name": "process_name",
+              "type": "string",
+              "value": "={{ $ifEmpty($json.body?.process_name, $ifEmpty($json.process_name, 'Nieuw Proces')) }}"
+            },
+            {
+              "id": "complexity",
+              "name": "complexity",
+              "type": "string",
+              "value": "={{ $ifEmpty($json.body?.complexity, $ifEmpty($json.complexity, 'simple')) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -144,
+        -96
+      ],
+      "id": "6ce9f525-0c5b-469a-9c48-9cce42667682",
+      "name": "Extract Request"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# 🧠 ENHANCED BPMN 2.0 INTELLIGENT GENERATOR WITH SMART POSITIONING\n\n## MACHINE-READABLE INPUT\n{\n  \"user_input\": {\n    \"process_name\": \"{{ ($json.process_name || 'Nieuw Proces').toString() }}\",\n    \"complexity\": \"{{ ($json.complexity || 'simple').toString() }}\",\n    \"process_description\": \"{{ ($json.process_description || 'Maak een eenvoudig proces').toString() }}\"\n  },\n  \"constraints\": {\n    \"externals_as_pools\": true,\n    \"is_executable\": true,\n    \"include_di\": true,\n    \"no_placeholders\": true\n  },\n  \"output_contract\": {\n    \"format\": \"bpmn_2_0_xml\",\n    \"root_tag\": \"bpmn:definitions\",\n    \"single_block\": true,\n    \"no_explanations\": true\n  }\n}\n\n## USER INPUT PROCESSING:\nUse the values from `user_input` above:\n- Process Description: {{ ($json.process_description || 'Maak een eenvoudig proces').toString() }}\n- Process Name: {{ ($json.process_name || 'Nieuw Proces').toString() }}\n- Complexity Level: {{ ($json.complexity || 'simple').toString() }}\n\n## 🔍 INTELLIGENT ANALYSIS PHASE:\n\n### STEP 1: KEYWORD DETECTION\nAnalyze process_description for structural indicators:\n\n**GATEWAY TRIGGERS:**\n- \"approval\", \"review\", \"decision\", \"check\" → EXCLUSIVE Gateway\n- \"parallel\", \"simultaneously\", \"at the same time\" → PARALLEL Gateway\n- \"multiple paths\", \"several options\", \"or\" → INCLUSIVE Gateway\n- \"wait for\", \"until\", \"event occurs\" → EVENT-BASED Gateway\n- \"feedback\", \"rework\", \"revise\", \"loop back\" → FEEDBACK Loop\n- \"reject\", \"deny\", \"fail\" → Rejection path\n\n**ACTOR EXTRACTION:**\n- \"customer [verb]\" → Lane: \"Customer\"\n- \"[role] reviews/approves\" → Lane: \"[Role]\"\n- \"system [verb]\" → Lane: \"System\"\n- \"manager [verb]\" → Lane: \"Manager\"\n- **Extra rule:** Als de procesbeschrijving externe partijen bevat (bijv. Payment Provider, Carrier, Extern Systeem), modelleer die in **aparte pools** met **message flows** i.p.v. lanes binnen één pool.\n\n### STEP 2: COMPLEXITY MAPPING & LAYOUT PLANNING\n**SIMPLE (when complexity is 'simple'):**\n- 3-4 tasks maximum, 1 decision point max\n- Layout: Single row per lane, 180px spacing\n- Canvas: 800x400px\n\n**MEDIUM (when complexity is 'medium'):**\n- 4-6 tasks, 1-2 gateways, possible feedback\n- Layout: Multi-row if needed, 160px spacing\n- Canvas: 1000x600px\n\n**COMPLEX (when complexity is 'complex'):**\n- 6+ tasks, multiple gateways, parallel paths\n- Layout: Multi-level grid, 140px spacing\n- Canvas: 1200x800px\n\n## 📐 INTELLIGENT POSITIONING ALGORITHM:\n\n### STEP 3: GRID CALCULATION SYSTEM\nBASE_COORDINATES:\n- Lane Height: 200px per swimlane\n- Start X: 180px (margin)\n- Element Width: 100px (tasks), 50px (gateways)\n- Element Height: 80px (tasks), 50px (gateways)\n- Horizontal Spacing: CALCULATED based on complexity\n- Vertical Center: (Lane_Y + 100px)\n\nPOSITIONING RULES:\n1. START_EVENT: x=180, y=lane_center\n2. TASKS: x=start_x + (index * spacing), y=lane_center - 40\n3. GATEWAYS: x=decision_point_x, y=lane_center - 25\n4. END_EVENT: x=final_x, y=lane_center\n\n### STEP 4: WAYPOINT ROUTING SYSTEM\nCLEAN ARROW ROUTING:\n- Horizontal flows: Direct line (2 waypoints max)\n- Cross-lane flows: 3-point routing (down, across, up)\n- Gateway branches: Angled routing with labels\n- Feedback loops: Arc routing to avoid overlaps\n\nWAYPOINT CALCULATION:\n- Source: element_center_x + element_width/2, element_center_y\n- Target: target_center_x - element_width/2, target_center_y\n- Intermediate: Use lane boundaries for cross-lane flows\n\n## 🏗️ ENHANCED XML TEMPLATES:\n\n### COMPLETE STRUCTURE WITH POSITIONING:\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<bpmn:definitions xmlns:bpmn=\"http://www.omg.org/spec/BPMN/20100524/MODEL\"\n  xmlns:bpmndi=\"http://www.omg.org/spec/BPMN/20100524/DI\"\n  xmlns:dc=\"http://www.omg.org/spec/DD/20100524/DC\"\n  xmlns:di=\"http://www.omg.org/spec/DD/20100524/DI\"\n  id=\"Definitions_1\" targetNamespace=\"http://bpmn.io/schema/bpmn\">\n  <bpmn:collaboration id=\"Collaboration_1\">\n    <bpmn:participant id=\"Participant_1\" name=\"[PROCESS_NAME]\" processRef=\"Process_1\" />\n  </bpmn:collaboration>\n  <bpmn:process id=\"Process_1\" isExecutable=\"true\">\n    <bpmn:laneSet id=\"LaneSet_1\">\n      [CALCULATED_LANES]\n    </bpmn:laneSet>\n    [PROCESS_ELEMENTS]\n    [SEQUENCE_FLOWS]\n  </bpmn:process>\n  <bpmndi:BPMNDiagram id=\"BPMNDiagram_1\">\n    <bpmndi:BPMNPlane id=\"BPMNPlane_1\" bpmnElement=\"Collaboration_1\">\n      <bpmndi:BPMNShape id=\"Participant_1_di\" bpmnElement=\"Participant_1\" isHorizontal=\"true\">\n        <dc:Bounds x=\"120\" y=\"80\" width=\"[CALCULATED_WIDTH]\" height=\"[CALCULATED_HEIGHT]\"/>\n      </bpmndi:BPMNShape>\n      [POSITIONED_LANE_SHAPES]\n      [POSITIONED_ELEMENT_SHAPES]\n      [POSITIONED_EDGES]\n    </bpmndi:BPMNPlane>\n  </bpmndi:BPMNDiagram>\n</bpmn:definitions>\n\n## 🎯 ENHANCED GENERATION ALGORITHM:\n\n### STEP 5: INTELLIGENT ASSEMBLY WITH POSITIONING\n1. Parse Process Description → Extract steps and actors\n2. Calculate Layout Dimensions → Based on complexity and element count\n3. Assign Lane Coordinates → 200px height per lane, stacked vertically\n4. Position Elements Horizontally → Even spacing based on process flow\n5. Generate Gateway Positioning → Centered at decision points\n6. Calculate Waypoints → Clean routing avoiding overlaps\n7. Add Labels and Annotations → Positioned to avoid element overlap\n8. Validate Coordinates → Ensure all elements fit within canvas bounds\n\n### STEP 6: POSITIONING VALIDATION\n- No element overlaps (minimum 20px clearance)\n- All waypoints create clean, readable arrows\n- Labels positioned to avoid conflicts\n- Canvas size adequate for all elements\n- Lane heights properly distributed\n- Cross-lane flows use proper routing\n\n## 🚀 CRITICAL OUTPUT REQUIREMENTS:\n\nSTRUCTURE:\n- Respects detected complexity level\n- Uses appropriate gateways based on keywords\n- Creates meaningful swimlanes from extracted actors\n- Implements feedback loops where mentioned\n- Externe partijen altijd in aparte pools met message flows\n- Contains NO template placeholders\n\nPOSITIONING:\n- Precise coordinates for ALL elements\n- Clean waypoint routing for ALL flows\n- Proper lane distribution and sizing\n- Professional diagram layout\n- Optimized for readability and flow comprehension\n\nQUALITY ASSURANCE:\n- All elements positioned within calculated canvas bounds\n- No overlapping elements or flows\n- Gateway branches properly spaced and labeled\n- Feedback loops use arc routing to avoid confusion\n- End result is publication-ready BPMN diagram\n\nFINAL CHECK: The generated XML must render immediately in BPMN.js with perfect positioning, no manual adjustment needed.\n\n## ✅ OUTPUT CONTRACT (STRICT)\n- Produce **only** a single BPMN 2.0 XML document that:\n  - Starts with `<?xml ...?>` and a single `<bpmn:definitions ...>` root.\n  - Contains **no** markdown, prose, JSON of uitleg buiten het XML.\n  - Has `isExecutable=\"true\"` op het hoofdproces.\n  - Heeft **BPMN DI** (shapes + edges met `dc:Bounds` en `di:waypoint`).\n  - Bevat **geen** placeholders zoals [CALCULATED_*] of [POSITIONED_*].\n- If any non-XML content would be output, **omit it** entirely.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        16,
+        -96
+      ],
+      "id": "48e92b1c-8624-4c14-8794-73249c3d8251",
+      "name": "BPMN Swimlane Generator"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"bpmn_xml\": $json.output || $json.text || 'Error: No BPMN generated', \"process_name\": $('Extract Request').item.json.process_name, \"description\": $('Extract Request').item.json.process_description, \"timestamp\": new Date().toISOString(), \"status\": \"success\" } }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Access-Control-Allow-Methods",
+                "value": "POST, OPTIONS"
+              },
+              {
+                "name": "Access-Control-Allow-Headers",
+                "value": "Content-Type"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Cache-Control",
+                "value": "no-cache, no-store, must-revalidate"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        352,
+        -96
+      ],
+      "id": "7112452d-3c13-4e30-b39b-3ccea7f27fb7",
+      "name": "Send Response"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-3-7-sonnet-20250219",
+          "mode": "list",
+          "cachedResultName": "Claude Sonnet 3.7"
+        },
+        "options": {
+          "maxTokensToSample": 16384
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        -128,
+        128
+      ],
+      "id": "91ed2f60-7937-4943-851d-434d242fc0ab",
+      "name": "Anthropic Chat Model",
+      "credentials": {
+        "anthropicApi": {
+          "id": "YU69abL3BNf6KuSk",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $workflow.id }}",
+        "contextWindowLength": 100
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        32,
+        112
+      ],
+      "id": "1bcc788b-c8cb-4487-a5b1-a571b84c630e",
+      "name": "Simple Memory"
+    }
+  ],
+  "connections": {
+    "BPMN Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Request": {
+      "main": [
+        [
+          {
+            "node": "BPMN Swimlane Generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BPMN Swimlane Generator": {
+      "main": [
+        [
+          {
+            "node": "Send Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anthropic Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "BPMN Swimlane Generator",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "BPMN Swimlane Generator",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c294e536a176e1800d2c1fe3bf3efe732d4dd26459b321229fdde8fc42080acc"
+  }
+}
