@@ -64,14 +64,14 @@
         header {
             background: var(--bg-primary);
             border-bottom: 1px solid var(--border-light);
-            padding: 16px 24px;
+            padding: 10px 24px;
             flex-shrink: 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            height: 100px;
+            height: 80px;
             overflow: visible;
             position: relative;
             z-index: 10;
@@ -86,14 +86,19 @@
             width: 100%;
         }
 
+        .logo {
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
         .logo img {
-            height: 280px;
-            max-height: 280px;
-            width: auto;
+            height: 250px !important;
+            width: auto !important;
+            max-width: none !important;
             transition: all 0.3s ease;
             filter: brightness(1.1) contrast(1.1);
-            position: relative;
-            top: -90px;
+            object-fit: contain;
         }
 
         .logo img:hover {
