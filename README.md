@@ -1,28 +1,53 @@
-# 16 - Phoenix BPMN Project
+# BPMN AI Studio - Deployment Package
 
-## 🎯 Project Status: **READY FOR DEVELOPMENT**
+## 📋 Inhoud
+Dit is de productie-klare versie van BPMN AI Studio, gebouwd voor deployment op **slimpunt.nl/demo5/**
 
-### 📋 Quick Start for New Claude Session:
-1. Read `CLAUDE-SESSION-INSTRUCTIONS.md` first
-2. Read `PROJECT-RULES.md` for discipline rules  
-3. Copy `original/` to `working/` and start there
-4. Follow disciplined development workflow
+### Bestanden:
+- `index.html` - Main entry point
+- `assets/` - CSS, JS en font bestanden
+- `vite.svg` - Favicon
 
-### 🗂️ Project Structure:
-- **PROJECT-RULES.md** - Development discipline rules (READ FIRST)
-- **CLAUDE-SESSION-INSTRUCTIONS.md** - Step-by-step session guide
-- **original/** - Source working version (when added)
-- **working/** - Active development directory
-- **v1-xxx/** - Milestone backups (when successful)
+## 🚀 Deployment Instructies
 
-### 🎖️ Goal:
-Develop professional BPMN web application with AI-powered diagram generation capability.
+### Voor slimpunt.nl:
+1. Upload alle bestanden naar `/httpdocs/demo5/` op je webserver
+2. Zorg dat de mapstructuur behouden blijft:
+   ```
+   httpdocs/demo5/
+   ├── index.html
+   ├── vite.svg
+   └── assets/
+       ├── index-[hash].js
+       ├── index-[hash].css
+       └── [font-files]
+   ```
 
-### 🚦 Project Rules Summary:
-- Work ONLY in `working/` directory
-- Complete one solution fully before backups
-- No file pollution (-v2, -test, -backup files)
-- Focus on quality architecture and user experience
-- Document everything when solution works
+### URL Access:
+- **Live URL**: https://slimpunt.nl/demo5/
+- **Lokale test**: Open index.html in browser (relatieve paths werken lokaal ook)
 
-**Project ready for disciplined development approach.**
+## ⚙️ Features
+- ✅ Enhanced AI BPMN generation met smart positioning
+- ✅ Professional swimlane support
+- ✅ Dark/Light mode toggle
+- ✅ SVG/PNG/XML export functionaliteit
+- ✅ Responsive interface
+- ✅ n8n backend integration
+
+## 🔧 Backend Requirement
+Zorg dat je n8n webhook actief is op:
+- **Endpoint**: `/bpmn-generator` 
+- **Model**: Claude Sonnet 3.7
+- **Enhanced prompt**: Gebruikt het verbeterde positioning algoritme
+
+## 📱 Browser Support
+- Chrome/Edge (aanbevolen)
+- Firefox
+- Safari
+- Moderne mobile browsers
+
+---
+*Gebouwd: $(date)*
+*Versie: Production-ready*
+*Base Path: /demo5/*
