@@ -1,0 +1,194 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ai-assistant",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-448, -96],
+      "id": "365551c7-73de-4f36-810c-d08370f95ffa",
+      "name": "Webhook",
+      "webhookId": "ai-assistant-webhook"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "user_message",
+              "name": "user_message",
+              "type": "string",
+              "value": "={{ $json.body.user_message || $json.user_message || 'Hallo, ik wil graag hulp!' }}"
+            },
+            {
+              "id": "system_context",
+              "name": "system_context",
+              "type": "object",
+              "value": "={{ $json.body.system_context || $json.system_context || {} }}"
+            },
+            {
+              "id": "conversation_history",
+              "name": "conversation_history",
+              "type": "array",
+              "value": "={{ $json.body.conversation_history || $json.conversation_history || [] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-288, -96],
+      "id": "86720eda-5a35-4c5d-ad3d-4dc00bb74cbd",
+      "name": "Extract Context"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# AI DIAGRAM ASSISTANT - CLIPPY STYLE\n\nYou are a helpful AI assistant like the classic Microsoft Clippy that helps users create better diagrams. You are integrated into a diagram tool and have context of what the user is doing.\n\n## PERSONALITY\n- Friendly and helpful like the original Clippy from Microsoft Office\n- Respond in the user's language (Dutch, English, or other languages)\n- Natural conversation - no artificial suggestions or buttons\n- Concise and to the point\n- Technically accurate but accessible\n\n## CURRENT CONTEXT\nUser message: {{ $json.user_message }}\n{% if $json.system_context.currentDiagram %}\nCurrent diagram:\n```\n{{ $json.system_context.currentDiagram }}\n```\n{% else %}\nNo current diagram.\n{% endif %}\n\nInterface Status:\n- Theme: {{ $json.system_context.currentTheme || 'default' }}\n- Direction: {{ $json.system_context.diagramDirection || 'TD' }}\n- Zoom: {{ $json.system_context.zoomLevel || 1 }}x\n- Dark mode: {{ $json.system_context.isDarkMode ? 'on' : 'off' }}\n- Code editor: {{ $json.system_context.showCodeEditor ? 'open' : 'hidden' }}\n\nEnvironment:\n- Browser: {{ $json.system_context.browser }}\n- Platform: {{ $json.system_context.platform }}\n- Screen: {{ $json.system_context.screenWidth }}x{{ $json.system_context.screenHeight }}\n- Time: {{ $json.system_context.timeOfDay }}:00\n- Language: {{ $json.system_context.language }}\n- Online: {{ $json.system_context.isOnline ? 'yes' : 'no' }}\n\n{% if $json.conversation_history and $json.conversation_history.length > 0 %}\nRecent conversation:\n{% for msg in $json.conversation_history.slice(-2) %}\n{{ msg.type }}: {{ msg.content }}\n{% endfor %}\n{% endif %}\n\n## YOUR ROLE\n- Help users with their diagram needs\n- Guide them to use interface features (themes, zoom, export, etc.)\n- DELEGATE diagram creation/editing to specialized workflows\n- Be environment-aware and context-sensitive\n- Give tips about interface controls and workflow optimization\n\n## RESPONSE FORMAT\nYou can respond in two ways:\n\n1. **Simple text response** - Just natural conversation\n2. **Action response** - When you want to create/edit diagrams\n\nFor actions, respond with JSON:\n```json\n{\n  \"response\": \"I'll create a pizza ordering process for you!\",\n  \"action\": \"generateDiagram\",\n  \"action_content\": \"pizza ordering process with payment options\"\n}\n```\n\nAvailable actions:\n- \"generateDiagram\" - Create NEW diagram (delegates to diagram-generator)\n- \"editDiagram\" - Modify EXISTING diagram (delegates to diagram-code-editor)\n- \"fillMainInput\" - Fill text without execution\n- \"fillCodeEditor\" - Fill code editor\n\n**CRITICAL RULES:**\n- Use \"generateDiagram\" when user asks to CREATE/MAKE diagrams:\n  - \"maak een diagram\"\n  - \"create a flowchart\"\n  - \"generate a process\"\n  - \"I need a diagram for...\"\n\n- Use \"editDiagram\" when user wants to MODIFY existing diagrams:\n  - \"verbeter dit diagram\"\n  - \"add a step\"\n  - \"change the colors\"\n  - \"make it better\"\n\n- Use simple text when:\n  - User asks questions about interface\n  - User wants tips or explanations\n  - General conversation\n\n## EXAMPLES:\n\nUser: \"maak een pizzabestel proces\"\nResponse:\n```json\n{\n  \"response\": \"Ik ga een pizzabestelproces voor je maken!\",\n  \"action\": \"generateDiagram\",\n  \"action_content\": \"pizza order process with menu selection, toppings, payment and delivery options\"\n}\n```\n\nUser: \"voeg een stap toe voor verificatie\"\nResponse:\n```json\n{\n  \"response\": \"Ik voeg een verificatiestap toe aan je diagram!\",\n  \"action\": \"editDiagram\",\n  \"action_content\": \"add verification step after login\"\n}\n```\n\nUser: \"hoe werk de zoom functie?\"\nResponse: \"Je kunt inzoomen met Ctrl+muiswiel, of gebruik de zoom knoppen rechtsonder! De zoom gaat van 25% tot 300%.\"\n\nBe natural, helpful, and conversational - just like the classic Clippy!",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [-128, -96],
+      "id": "7fcf9a4d-cf26-42ce-b988-3d917bad4a27",
+      "name": "AI Assistant Agent"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"response\": $json.output || $json.text || 'Ik help je graag! Wat wil je weten over je diagram?', \"timestamp\": new Date().toISOString() } }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Access-Control-Allow-Methods",
+                "value": "POST, OPTIONS"
+              },
+              {
+                "name": "Access-Control-Allow-Headers",
+                "value": "Content-Type"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "name": "Cache-Control",
+                "value": "no-cache, no-store, must-revalidate"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [208, -96],
+      "id": "5e4be20b-8331-489f-a357-43ed2274b811",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [-272, 112],
+      "id": "8c97ec45-e34b-4df6-8afa-cb0a1b41a481",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "BN0toBL0bKT7JjjY",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $workflow.id }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [-128, 112],
+      "id": "6477e05c-7d08-4f02-ba97-50fdf8a14268",
+      "name": "Simple Memory"
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Context": {
+      "main": [
+        [
+          {
+            "node": "AI Assistant Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Assistant Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Assistant Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Assistant Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "c294e536a176e1800d2c1fe3bf3efe732d4dd26459b321229fdde8fc42080acc"
+  }
+}
