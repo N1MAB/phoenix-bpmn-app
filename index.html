@@ -409,6 +409,14 @@
     </div>
 
     <script>
+        // Force cache refresh for mobile browsers
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    registration.unregister();
+                }
+            });
+        }
 
         // Dropdown functionality
         const dropdown = document.getElementById('dropdown');
